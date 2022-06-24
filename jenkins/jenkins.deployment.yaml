@@ -19,6 +19,15 @@ spec:
       labels:
         app: jenkins
     spec:
+      affinity:
+       nodeAffinity:
+         requiredDuringSchedulingIgnoredDuringExecution:
+           nodeSelectorTerms:
+           - matchExpressions:
+             - key: alpha.eksctl.io/nodegroup-name
+               operator: In
+               values:
+               - ng2-private   
       serviceAccountName: jenkins
       containers:
       - name: jenkins
@@ -35,8 +44,8 @@ spec:
         volumeMounts:
         - mountPath: /var/jenkins_home
           name: jenkins
-      nodeSelector:
-        kubernetes.io/hostname: ip-192-168-55-114.eu-west-1.compute.internal
+      # nodeSelector:
+      #   kubernetes.io/hostname: ip-192-168-55-114.eu-west-1.compute.internal
       restartPolicy: Always
       securityContext:
         runAsUser: 0
